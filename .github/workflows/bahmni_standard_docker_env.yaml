@@ -35,15 +35,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.BAHMNI_AWS_ID }}
-          aws-secret-access-key: ${{ secrets.BAHMNI_AWS_SECRET }}
-          aws-region: ap-south-1
-          role-to-assume: ${{ secrets.BAHMNI_INFRA_ADMIN_ROLE }}
-          role-duration-seconds: 1200  # 20 mins
-          role-session-name: BahmniInfraAdminSession
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.BAHMNI_AWS_ID }}
+      #     aws-secret-access-key: ${{ secrets.BAHMNI_AWS_SECRET }}
+      #     aws-region: ap-south-1
+      #     role-to-assume: ${{ secrets.BAHMNI_INFRA_ADMIN_ROLE }}
+      #     role-duration-seconds: 1200  # 20 mins
+      #     role-session-name: BahmniInfraAdminSession
       - name: Create/Update Containers
         run: |
           if [ "$UPDATE_BAHMNI_OPTION" == "update_without_removing_volumes" ]; then
