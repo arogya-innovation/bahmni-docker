@@ -52,26 +52,26 @@ jobs:
             command="docker compose --env-file .env.dev down -v && docker compose --env-file .env.dev up -d"
           fi
           
-          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=bahmni-standard-docker" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
+          # INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=bahmni-standard-docker" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[].InstanceId" --output text)
           
-          if [ -z "$INSTANCE_ID" ]; then
-            echo "Instance not running"
-          else
-            aws ssm send-command \
-            --instance-ids "$INSTANCE_ID" \
-            --document-name "AWS-RunShellScript" \
-            --comment "Update running containers" \
-            --parameters '{
-                "commands": [
-                  ". /home/ubuntu/.bash_profile",
-                  "git pull -r",
-                  "docker compose --env-file .env.dev pull",
-                  "'"$command"'",
-                  "docker compose --env-file .env.dev restart proxy",
-                  "docker image prune -f"
-                ],
-                "workingDirectory": [
-                  "/home/ubuntu/bahmni-docker/bahmni-standard"
-              ]
-            }' | jq '.Command | {CommandId: .CommandId, Parameters: .Parameters, Status: .Status}'
-          fi
+          # if [ -z "$INSTANCE_ID" ]; then
+          #   echo "Instance not running"
+          # else
+          #   aws ssm send-command \
+          #   --instance-ids "$INSTANCE_ID" \
+          #   --document-name "AWS-RunShellScript" \
+          #   --comment "Update running containers" \
+          #   --parameters '{
+          #       "commands": [
+          #         ". /home/ubuntu/.bash_profile",
+          #         "git pull -r",
+          #         "docker compose --env-file .env.dev pull",
+          #         "'"$command"'",
+          #         "docker compose --env-file .env.dev restart proxy",
+          #         "docker image prune -f"
+          #       ],
+          #       "workingDirectory": [
+          #         "/home/ubuntu/bahmni-docker/bahmni-standard"
+          #     ]
+          #   }' | jq '.Command | {CommandId: .CommandId, Parameters: .Parameters, Status: .Status}'
+          # fi
